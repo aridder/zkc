@@ -1,39 +1,86 @@
-# RISC Zero Rust Starter Template
+# Enhanced Privacy in Real Estate Transactions with RISC Zero zkVM and Verifiable Credentials
 
-Welcome to the RISC Zero Rust Starter Template! This template is intended to
-give you a starting point for building a project using the RISC Zero zkVM.
-Throughout the template (including in this README), you'll find comments
-labelled `TODO` in places where you'll need to make changes. To better
-understand the concepts behind this template, check out the [zkVM
-Overview][zkvm-overview].
+This is a project for the [ZK Hack Istanbul](https://www.zkistanbul.com/) hackathon.
+
+Thank you to the [RISC Zero](https://dev.risczero.com/) team for their support and guidance throughout the hackathon. 
+
+Also, thank you to the [ZK Hack](https://zkhack.dev/) team for organizing this event. It was a great experience!
 
 ## Quick Start
 
-First, make sure [rustup] is installed. The
+The host program reads the `data.json` file and passes the data to the guest.
+This is where bid_size is set. You can change this to see if the program fails is set above the loan amount.
+
+First, make sure [rustup](https://rustup.rs/) is installed. The
 [`rust-toolchain.toml`][rust-toolchain] file will be used by `cargo` to
 automatically install the correct version.
 
 To build all methods and execute the method within the zkVM, run the following
 command:
 
+To run in development mode, run the following command:
+
+```bash
+RISC0_DEV_MODE=true cargo run
+````
+*Caution - When running in DEV mode, the receipt is fake!*
+
+To run for production, and get a real receipt, run the following command:
+
 ```bash
 cargo run
 ```
 
-This is an empty template, and so there is no expected output (until you modify
-the code).
+## Overview
 
-### Executing the project locally in development mode
+This project harnesses the power of RISC Zero's zkVM to demonstrate an enhanced privacy application in real estate
+transactions.
+It specifically explores the utilization of Verifiable Credentials from eIDAS 2.0 for EU citizens, showcasing how these
+credentials
+can be used in a more private manner through Zero-Knowledge Proofs (ZKP) in real-world scenarios.
 
-During development, faster iteration upon code changes can be achieved by leveraging [dev-mode], we strongly suggest activating it during your early development phase. Furthermore, you might want to get insights into the execution statistics of your project, and this can be achieved by specifying the environment variable `RUST_LOG="executor=info"` before running your project.
+## Objectives
 
-Put together, the command to run your project in development mode while getting execution statistics is:
+- To demonstrate the effective use of RISC Zero's zkVM in privacy-centric applications.
+- To explore the application of Verifiable Credentials in maintaining privacy in financial transactions.
+- To investigate the potential of eIDAS 2.0 Verifiable Credentials in enhancing privacy for EU citizens, particularly in
+  hiding sensitive information like maximum bid amounts in real estate bidding and social security numbers in other use
+  cases.
 
-```bash
-RUST_LOG="executor=info" RISC0_DEV_MODE=1 cargo run
-```
+## Implementation
 
-### Running proofs remotely on Bonsai
+The application employs two key Verifiable Credentials:
+
+1. *PersonCredential*: A credential verified by a trusted electronic ID (eID) provider, affirming the identity of the
+   individual.
+2. *HouseLoanCredential*: A credential from a bank, detailing the maximum bid amount and the expiration date for the
+   granted privilege.
+   These credentials are signed by respective issuers and authenticated by the user.
+
+## Core Process:
+
+1. Credential Submission: Users submit signed JWTs for PersonCredential and HouseLoanCredential.
+2. The RISC Zero zkVM runs the guest code, which performs the following checks:
+    - Validation of JWT signatures and data.
+    - Comparison of the bid size with the loan amount. If the bid exceeds the loan amount, the process fails.
+3. Output Generation: Upon successful validation, the system generates:
+    - A Receipt with a cryptographic seal.
+    - A Journal containing the public output, accessible via receipt.journal.
+
+## Technology Stack
+
+[RISC Zero zkVM](https://dev.risczero.com/)
+[Verifiable Credentials](https://www.w3.org/TR/vc-data-model/) - All citizens will have a digital wallet that contains
+their credentials from 2026/2027.
+
+## Key Features
+
+* Enhanced Privacy: Employs ZKP to verify transactions without exposing sensitive personal and financial details.
+* Secure Transaction Validation: Ensures financial integrity by validating bid amounts against pre-approved loans.
+* Versatile Application: Demonstrates the potential of Verifiable Credentials with ZK beyond real estate, such as
+  providing proof of age without revealing full social security numbers.
+
+## Running proofs remotely on Bonsai
 
 _Note: The Bonsai proving service is still in early Alpha; an API key is
 required for access. [Click here to request access][bonsai access]._
@@ -46,20 +93,6 @@ environment variables:
 BONSAI_API_KEY="YOUR_API_KEY" BONSAI_API_URL="BONSAI_URL" cargo run
 ```
 
-## How to create a project based on this template
-
-Search this template for the string `TODO`, and make the necessary changes to
-implement the required feature described by the `TODO` comment. Some of these
-changes will be complex, and so we have a number of instructional resources to
-assist you in learning how to write your own code for the RISC Zero zkVM:
-
-- The [RISC Zero Developer Docs][dev-docs] is a great place to get started.
-- Example projects are available in the [examples folder][examples] of
-  [`risc0`][risc0-repo] repository.
-- Reference documentation is available at [https://docs.rs][docs.rs], including
-  [`risc0-zkvm`][risc0-zkvm], [`cargo-risczero`][cargo-risczero],
-  [`risc0-build`][risc0-build], and [others][crates].
-
 ## Directory Structure
 
 It is possible to organize the files for these components in various ways.
@@ -67,46 +100,20 @@ However, in this starter template we use a standard directory structure for zkVM
 applications, which we think is a good starting point for your applications.
 
 ```text
-project_name
+zkc
+├── data.json                             <-- [Mock data - Verfiable Credentials, public keys, etc.]
 ├── Cargo.toml
 ├── host
 │   ├── Cargo.toml
 │   └── src
-│       └── main.rs                        <-- [Host code goes here]
+│       └── main.rs                        <-- [Host code for running the zkVM]
 └── methods
     ├── Cargo.toml
     ├── build.rs
     ├── guest
     │   ├── Cargo.toml
     │   └── src
-    │       └── bin
-    │           └── method_name.rs         <-- [Guest code goes here]
+    │       └── main.rs                   <-- [Guest code for house bid, jwt validation, etc.]
     └── src
         └── lib.rs
 ```
-
-## Video Tutorial
-
-For a walk-through of how to build with this template, check out this [excerpt
-from our workshop at ZK HACK III][zkhack-iii].
-
-## Questions, Feedback, and Collaborations
-
-We'd love to hear from you on [Discord][discord] or [Twitter][twitter].
-
-[bonsai access]: https://bonsai.xyz/apply
-[cargo-risczero]: https://docs.rs/cargo-risczero
-[crates]: https://github.com/risc0/risc0/blob/main/README.md#rust-binaries
-[dev-docs]: https://dev.risczero.com
-[dev-mode]: https://dev.risczero.com/api/zkvm/dev-mode
-[discord]: https://discord.gg/risczero
-[docs.rs]: https://docs.rs/releases/search?query=risc0
-[examples]: https://github.com/risc0/risc0/tree/main/examples
-[risc0-build]: https://docs.rs/risc0-build
-[risc0-repo]: https://www.github.com/risc0/risc0
-[risc0-zkvm]: https://docs.rs/risc0-zkvm
-[rustup]: https://rustup.rs
-[rust-toolchain]: rust-toolchain.toml
-[twitter]: https://twitter.com/risczero
-[zkvm-overview]: https://dev.risczero.com/zkvm
-[zkhack-iii]: https://www.youtube.com/watch?v=Yg_BGqj_6lg&list=PLcPzhUaCxlCgig7ofeARMPwQ8vbuD6hC5&index=5

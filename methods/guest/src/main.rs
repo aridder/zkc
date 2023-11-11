@@ -84,6 +84,23 @@ struct PersonCredentialSubjectClaims {
     context: Vec<String>,
 }
 
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+struct HouseLoanCredentialSubjectClaims {
+    #[serde(rename = "credentialSubject")]
+    credential_subject: HouseLoanCredentialSubject,
+    #[serde(rename = "type")]
+    types: Vec<String>,
+    #[serde(rename = "@context")]
+    context: Vec<String>,
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+struct HouseLoanCredentialClaims{
+    vc: HouseLoanCredentialSubjectClaims,
+    sub: String,
+    iss: String,
+}
+
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct PersonCredentialClaims{
     vc: PersonCredentialSubjectClaims,
@@ -94,16 +111,43 @@ struct PersonCredentialClaims{
 
 pub fn main() {
     // Decode the verifying key, message, and signature from the inputs.
-    let (age, jwt, public_key): (u32, String, String) = env::read();
-    let public_key_bytes: &[u8; 32] = &hex::decode(&public_key).unwrap().try_into().unwrap();
+    // bid_size: u32,
+    // person_credential_jwt: &str,
+    // house_loan_credential_jwt: &str,
+    // eid_issuer_public_key: &str,
+    // bank_public_key: &str,
+
+    let (bid_size, person_credential_jwt, house_loan_credential_jwt, eid_issuer_public_key, bank_public_key): (u32, String, String, String, String) = env::read();
+    let bytes_pk_bank: &[u8; 32] = &hex::decode(&bank_public_key).unwrap().try_into().unwrap();
+    let bytes_pk_eid_issuer: &[u8; 32] = &hex::decode(&eid_issuer_public_key).unwrap().try_into().unwrap();
 
     // Verify the signature, panicking if verification fails.
-    let verifying_key = VerifyingKey::from_bytes(&public_key_bytes).unwrap();
-    let token = UntrustedToken::new(&jwt).unwrap();
-    println!("token: {:?}", token);
-    let token: Token<PersonCredentialClaims> = Ed25519.validator(&verifying_key).validate(&token).unwrap();
-    println!("token: {:?}", token);
+    let verifying_key_bank = VerifyingKey::from_bytes(&bytes_pk_bank).unwrap();
+    let verifying_key_eid_issuer = VerifyingKey::from_bytes(&bytes_pk_eid_issuer).unwrap();
+
+    let untrusted_token_person_credential = UntrustedToken::new(&person_credential_jwt).unwrap();
+    let untrusted_token_house_loan_credential = UntrustedToken::new(&house_loan_credential_jwt).unwrap();
+
+    let token_person: Token<PersonCredentialClaims> = Ed25519.validator(&verifying_key_eid_issuer).validate(&untrusted_token_person_credential).unwrap();
+    let token_house_loan: Token<HouseLoanCredentialClaims> = Ed25519.validator(&verifying_key_bank).validate(&untrusted_token_house_loan_credential).unwrap();
+
+    // check if bid_size is less than loan_amount
+    let person_crededential = token_person.claims().clone();
+    let name = &person_crededential.custom.vc.credential_subject.name;
+    let date_of_birth = &person_crededential.custom.vc.credential_subject.date_of_birth;
+
+    let house_loan_crededential = token_house_loan.claims().clone();
+    let loan_amount = house_loan_crededential.custom.vc.credential_subject.loan_amount;
+
+    println!("name: {:?}", name);
+    println!("date_of_birth: {:?}", date_of_birth);
+    println!("loan_amount: {:?}", loan_amount);
+    println!("bid_size: {:?}", bid_size);
+
+    let bid_size_exceeds_loan_amount = bid_size > loan_amount;
+    assert_eq!(bid_size_exceeds_loan_amount, false);
+    println!("bid_size_exceeds_loan_amount: {:?}", bid_size_exceeds_loan_amount);
 
     // Commit to the journal the verifying key and message that was signed.
-    env::commit(&(age));
+    env::commit(&bid_size_exceeds_loan_amount);
 }

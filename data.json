@@ -1,4 +1,5 @@
 {
+  "bidSize": 90000,
   "eidIssuer": {
     "public_key": "08a7afd90669185118473b0c32b131e4ec117640baee540b9c743a782bb6b61e"
   },

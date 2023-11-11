@@ -35,19 +35,26 @@ struct Credential {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Root {
-    eidIssuer: PublicKeyHolder,
+    #[serde(rename = "bidSize")]
+    bid_size: u32,
+    #[serde(rename = "eidIssuer")]
+    eid_issuer: PublicKeyHolder,
     bank: PublicKeyHolder,
     person: PublicKeyHolder,
-    personCredential: Credential,
-    houseLoanCredential: Credential,
+    #[serde(rename = "personCredential")]
+    person_credential: Credential,
+    #[serde(rename = "houseLoanCredential")]
+    house_loan_credential: Credential,
 }
 
-fn prove_jwt_age_verification(
-    age: u32,
-    jwt: &str,
-    public_key: &str,
+fn prove_valid_bid(
+    bid_size: u32,
+    person_credential_jwt: &str,
+    house_loan_credential_jwt: &str,
+    eid_issuer_public_key: &str,
+    bank_public_key: &str,
 ) -> Receipt {
-    let input = (age, jwt, public_key);
+    let input = (bid_size, person_credential_jwt, house_loan_credential_jwt, eid_issuer_public_key, bank_public_key);
     let env = ExecutorEnv::builder()
         .write(&input)
         .unwrap()
@@ -68,38 +75,21 @@ fn main() {
     // read json file from current directory
     let data = fs::read_to_string("./data.json").expect("Unable to read file");
 
-    // Deserialize the JSON data
-    println!("data: {:?}", data);
     let root: Root = serde_json::from_str(&data).expect("JSON was not well-formatted");
 
     // Initialize variables
-    let public_key_eid = root.eidIssuer.public_key;
+    let bid_size = root.bid_size;
+    let public_key_eid = root.eid_issuer.public_key;
     let public_key_bob = root.person.public_key;
     let public_key_bank = root.bank.public_key;
 
-    let person_credential = root.personCredential;
-    let person_credential_jwt = person_credential.proof.jwt;
-    let house_loan_credential = root.houseLoanCredential;
+    let person_credential = root.person_credential;
+    let house_loan_credential = root.house_loan_credential;
 
-    let age = 33;
-    let receipt = prove_jwt_age_verification(age, &person_credential_jwt, &public_key_eid);
-    let (age): u32 = receipt.journal.decode().unwrap();
-    println!("age: {:?}", age);
-    // let signing_key = SigningKey::random(&mut OsRng); // Serialize with `::to_bytes()`
-    // let message = b"This is a message that will be signed, and verified within the zkVM";
-    // let signature:Signature = signing_key.sign(message);
-    // let receipt = prove_ecdsa_verification(signing_key.verifying_key(), message, &signature);
-
-    // let (encoded_verifying_key, receipt_message): (EncodedPoint, Vec<u8>) = receipt.journal.decode().unwrap();
-    // let verifying_key = VerifyingKey::from_encoded_point(&encoded_verifying_key).unwrap();
-    //
-    // // print message in string
-    // let message_str = String::from_utf8(receipt_message).unwrap();
-    // println!("message_str: {:?}", message_str);
-
-    // Optional: Verify receipt to confirm that recipients will also be able to
-    // verify your receipt
+    let receipt = prove_valid_bid(bid_size, &person_credential.proof.jwt, &house_loan_credential.proof.jwt, &public_key_eid, &public_key_bank);
+    let (is_valid_bid): u32 = receipt.journal.decode().unwrap();
     receipt.verify(JWT_VERIFY_ID).unwrap();
 
+    println!("is_valid_bid: {:?}", is_valid_bid);
     println!("Receipt verified successfully!");
 }

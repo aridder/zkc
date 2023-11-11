@@ -1,18 +1,18 @@
 [package]
-name = "ecdsa_verify"
+name = "jwt_verify"
 version = "0.1.0"
 edition = "2021"
 
 [workspace]
 
-[patch.crates-io]
-# Placing these patch statement in the workspace Cargo.toml will add RISC Zero SHA-256 and bigint
-# multiplication accelerator support for all downstream usages of the following crates.
-
 [dependencies]
+serde = "1.0"
+serde_json = "1.0"
 risc0-zkvm = { version = "0.19.1", default-features = false, features = ["std"] }
-hex-literal = "0.4"
+hex = "0.4.3"
 k256 = { version = "=0.13.1", features = ["arithmetic", "serde", "expose-field", "std", "ecdsa"], default_features = false }
+jwt-compact = { version = "0.8.0", features = ["ed25519-dalek"] }
+ed25519-dalek = "2.0.0"
 
 [profile.release]
 lto = "thin"

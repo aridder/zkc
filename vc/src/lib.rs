@@ -1,4 +1,4 @@
-use jwt_compact::{alg::*, prelude::*, Token, UntrustedToken};
+/*use jwt_compact::{alg::*, prelude::*, Token, UntrustedToken};
 use serde::{Deserialize, Serialize};
 use ed25519_dalek::{VerifyingKey};
 
@@ -50,7 +50,7 @@ static VC: &str = r#"{
     "issuanceDate": "2023-11-11T09:14:07.000Z",
     "proof": {
         "type": "JwtProof2020",
-        "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIsImh0dHBzOi8vdmVyYW1vLmlvL2NvbnRleHRzL3Byb2ZpbGUvdjEiXSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIlBlcnNvbkNyZWRlbnRpYWwiXSwiY3JlZGVudGlhbFN1YmplY3QiOnsiZGF0ZU9mQmlydGgiOiIwMS4wNS4xOTg4In19LCJzdWIiOiJkaWQ6a2V5Ono2TWt1cG9yczIxTWl6SFl6WHhndlUzclBDN2NXdFNrOVBhcGlmMmNhUXNmelgxVCIsIm5iZiI6MTY5OTY5NDA0NywiaXNzIjoiZGlkOmtleTp6Nk1rcmJ3d1diSk1rRXhLN1RvMnFkaEtGdjhLQ2QybktBaG9wUmdDeUhXakgyYmcifQ.76ksY2vmKksoV3N5b5zmBbaqLaT1Xcb45GIxAn9VhQX6iKzcDKFr-TG5x_7YhGuz5y02_7h7Qu2wuG04kEI0DA"
+        "guest": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIsImh0dHBzOi8vdmVyYW1vLmlvL2NvbnRleHRzL3Byb2ZpbGUvdjEiXSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIlBlcnNvbkNyZWRlbnRpYWwiXSwiY3JlZGVudGlhbFN1YmplY3QiOnsiZGF0ZU9mQmlydGgiOiIwMS4wNS4xOTg4In19LCJzdWIiOiJkaWQ6a2V5Ono2TWt1cG9yczIxTWl6SFl6WHhndlUzclBDN2NXdFNrOVBhcGlmMmNhUXNmelgxVCIsIm5iZiI6MTY5OTY5NDA0NywiaXNzIjoiZGlkOmtleTp6Nk1rcmJ3d1diSk1rRXhLN1RvMnFkaEtGdjhLQ2QybktBaG9wUmdDeUhXakgyYmcifQ.76ksY2vmKksoV3N5b5zmBbaqLaT1Xcb45GIxAn9VhQX6iKzcDKFr-TG5x_7YhGuz5y02_7h7Qu2wuG04kEI0DA"
     }
 }"#;
 
@@ -106,4 +106,4 @@ pub fn verify_credential(jwt: &str, public_key: &str) -> bool {
     let token: Token<VCClaims> = Ed25519.validator(&verifying_key).validate(&token).unwrap();
     println!("token: {:?}", token);
     true
-}
+}*/

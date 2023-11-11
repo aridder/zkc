@@ -1,0 +1,13 @@
+[package]
+name = "vc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1.0"
+serde_json = "1.0"
+thiserror = "1.0"
+base64 = "0.13.0"
+hex = "0.4.3"
+jwt-compact = { version = "0.8.0", features = ["ed25519-dalek"] }
+ed25519-dalek = "2.0.0"

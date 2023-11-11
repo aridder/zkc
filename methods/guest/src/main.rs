@@ -9,9 +9,17 @@ use serde::{Deserialize, Serialize};
 risc0_zkvm::guest::entry!(main);
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-struct CredentialSubject {
-    #[serde(rename = "dateOfBirth")]
+struct PersonCredentialSubject {
+    name: String,
     date_of_birth: String,
+    nationality: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+struct HouseLoanCredentialSubject {
+    loan_amount: u32,
+    loan_purpose: String,
+    expiration_date: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -28,8 +36,6 @@ struct Proof {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 struct VerifiableCredential {
-    #[serde(rename = "credentialSubject")]
-    credential_subject: CredentialSubject,
     issuer: Issuer,
     #[serde(rename = "type")]
     types: Vec<String>,
@@ -41,9 +47,37 @@ struct VerifiableCredential {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-struct VC {
+struct PersonCredential {
     #[serde(rename = "credentialSubject")]
-    credential_subject: CredentialSubject,
+    credential_subject: PersonCredentialSubject,
+    issuer: Issuer,
+    #[serde(rename = "type")]
+    types: Vec<String>,
+    #[serde(rename = "@context")]
+    context: Vec<String>,
+    #[serde(rename = "issuanceDate")]
+    issuance_date: String,
+    proof: Proof,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+struct HouseLoanCredential {
+    #[serde(rename = "credentialSubject")]
+    credential_subject: HouseLoanCredentialSubject,
+    issuer: Issuer,
+    #[serde(rename = "type")]
+    types: Vec<String>,
+    #[serde(rename = "@context")]
+    context: Vec<String>,
+    #[serde(rename = "issuanceDate")]
+    issuance_date: String,
+    proof: Proof,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+struct PersonCredentialSubjectClaims {
+    #[serde(rename = "credentialSubject")]
+    credential_subject: PersonCredentialSubject,
     #[serde(rename = "type")]
     types: Vec<String>,
     #[serde(rename = "@context")]
@@ -51,8 +85,8 @@ struct VC {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-struct VCClaims {
-    vc: VC,
+struct PersonCredentialClaims{
+    vc: PersonCredentialSubjectClaims,
     sub: String,
     iss: String,
 }
@@ -66,7 +100,8 @@ pub fn main() {
     // Verify the signature, panicking if verification fails.
     let verifying_key = VerifyingKey::from_bytes(&public_key_bytes).unwrap();
     let token = UntrustedToken::new(&jwt).unwrap();
-    let token: Token<VCClaims> = Ed25519.validator(&verifying_key).validate(&token).unwrap();
+    println!("token: {:?}", token);
+    let token: Token<PersonCredentialClaims> = Ed25519.validator(&verifying_key).validate(&token).unwrap();
     println!("token: {:?}", token);
 
     // Commit to the journal the verifying key and message that was signed.

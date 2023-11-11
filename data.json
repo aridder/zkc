@@ -1,0 +1,57 @@
+{
+  "eidIssuer": {
+    "public_key": "08a7afd90669185118473b0c32b131e4ec117640baee540b9c743a782bb6b61e"
+  },
+  "bank": {
+    "public_key": "fd7042c505b5a4f047909da8d4c6c344b25a29f233f2201639445568617a6445"
+  },
+  "person": {
+    "public_key": "5a2de976cf11503f2e6b670e2e12e0fe9f3b014eb615416b8ed0ac401811fbfd"
+  },
+  "personCredential": {
+    "credentialSubject": {
+      "name": "Bob Bobley",
+      "date_of_birth": "1980-10-01",
+      "nationality": "NO",
+      "id": "did:key:z6MkkXHLrJ3bpDinQ736dvfBqt1AQhdqECbEkfmm7UHMyTCQ"
+    },
+    "issuer": {
+      "id": "did:key:z6Mkf33cM15mFcLdi7fBwV8yKDu8o7LQSTHbaPzJaDWSWogR"
+    },
+    "type": [
+      "VerifiableCredential",
+      "PersonCredential"
+    ],
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1"
+    ],
+    "issuanceDate": "2023-11-11T20:37:55.000Z",
+    "proof": {
+      "type": "JwtProof2020",
+      "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUGVyc29uQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJuYW1lIjoiQm9iIEJvYmxleSIsImRhdGVfb2ZfYmlydGgiOiIxOTgwLTEwLTAxIiwibmF0aW9uYWxpdHkiOiJOTyJ9fSwic3ViIjoiZGlkOmtleTp6Nk1ra1hITHJKM2JwRGluUTczNmR2ZkJxdDFBUWhkcUVDYkVrZm1tN1VITXlUQ1EiLCJuYmYiOjE2OTk3MzUwNzUsImlzcyI6ImRpZDprZXk6ejZNa2YzM2NNMTVtRmNMZGk3ZkJ3Vjh5S0R1OG83TFFTVEhiYVB6SmFEV1NXb2dSIn0.ruDArqFrsNLm119AxflJgmOaztogxyF7hMFnFJ8NfoY2aq2fQeMY5gDgKrC4-9_XT8DKYPUm8TXI90QVF9XEBw"
+    }
+  },
+  "houseLoanCredential": {
+    "credentialSubject": {
+      "loan_amount": 1000000,
+      "loan_purpose": "house purchase",
+      "expiration_date": "2023-11-18",
+      "id": "did:key:z6MkkXHLrJ3bpDinQ736dvfBqt1AQhdqECbEkfmm7UHMyTCQ"
+    },
+    "issuer": {
+      "id": "did:key:z6MkwWaUd3uHZchEqcFzFKD2Qy5CTrJdTx6pnXEAdc2B2nDJ"
+    },
+    "type": [
+      "VerifiableCredential",
+      "HouseLoanCredential"
+    ],
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1"
+    ],
+    "issuanceDate": "2023-11-11T20:37:55.000Z",
+    "proof": {
+      "type": "JwtProof2020",
+      "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiSG91c2VMb2FuQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJsb2FuX2Ftb3VudCI6MTAwMDAwMCwibG9hbl9wdXJwb3NlIjoiaG91c2UgcHVyY2hhc2UiLCJleHBpcmF0aW9uX2RhdGUiOiIyMDIzLTExLTE4In19LCJzdWIiOiJkaWQ6a2V5Ono2TWtrWEhMckozYnBEaW5RNzM2ZHZmQnF0MUFRaGRxRUNiRWtmbW03VUhNeVRDUSIsIm5iZiI6MTY5OTczNTA3NSwiaXNzIjoiZGlkOmtleTp6Nk1rd1dhVWQzdUhaY2hFcWNGekZLRDJReTVDVHJKZFR4NnBuWEVBZGMyQjJuREoifQ.bftL5w-4JRKxvIg-5mFE9G305sHPzaSWng-VggTFmKPgXtJytj8XNFtGWh3bkCx1gAj2kdy5y7lMERwdgCv7Cw"
+    }
+  }
+}

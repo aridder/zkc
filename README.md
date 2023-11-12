@@ -33,6 +33,7 @@ cargo run
 
 ## Overview
 
+
 This project harnesses the power of RISC Zero's zkVM to demonstrate an enhanced privacy application in real estate
 transactions.
 It specifically explores the utilization of Verifiable Credentials from eIDAS 2.0 for EU citizens, showcasing how these
@@ -48,6 +49,9 @@ can be used in a more private manner through Zero-Knowledge Proofs (ZKP) in real
   cases.
 
 ## Implementation
+
+
+![Flow](./assets/flow.png)
 
 The application employs two key Verifiable Credentials:
 

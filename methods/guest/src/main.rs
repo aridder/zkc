@@ -133,21 +133,15 @@ pub fn main() {
 
     // check if bid_size is less than loan_amount
     let person_crededential = token_person.claims().clone();
-    let name = &person_crededential.custom.vc.credential_subject.name;
-    let date_of_birth = &person_crededential.custom.vc.credential_subject.date_of_birth;
+    let person_did = &person_crededential.custom.sub;
 
     let house_loan_crededential = token_house_loan.claims().clone();
     let loan_amount = house_loan_crededential.custom.vc.credential_subject.loan_amount;
-
-    println!("name: {:?}", name);
-    println!("date_of_birth: {:?}", date_of_birth);
-    println!("loan_amount: {:?}", loan_amount);
-    println!("bid_size: {:?}", bid_size);
 
     let bid_size_exceeds_loan_amount = bid_size > loan_amount;
     assert_eq!(bid_size_exceeds_loan_amount, false);
     println!("bid_size_exceeds_loan_amount: {:?}", bid_size_exceeds_loan_amount);
 
     // Commit to the journal the verifying key and message that was signed.
-    env::commit(&bid_size_exceeds_loan_amount);
+    env::commit(&(bid_size_exceeds_loan_amount, person_did));
 }

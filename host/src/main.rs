@@ -80,16 +80,16 @@ fn main() {
     // Initialize variables
     let bid_size = root.bid_size;
     let public_key_eid = root.eid_issuer.public_key;
-    let public_key_bob = root.person.public_key;
     let public_key_bank = root.bank.public_key;
 
     let person_credential = root.person_credential;
     let house_loan_credential = root.house_loan_credential;
 
     let receipt = prove_valid_bid(bid_size, &person_credential.proof.jwt, &house_loan_credential.proof.jwt, &public_key_eid, &public_key_bank);
-    let (is_valid_bid): u32 = receipt.journal.decode().unwrap();
+    let (is_valid_bid, bidder_did): (u32, String) = receipt.journal.decode().unwrap();
     receipt.verify(JWT_VERIFY_ID).unwrap();
 
-    println!("is_valid_bid: {:?}", is_valid_bid);
     println!("Receipt verified successfully!");
+    println!("DID of the bidder: {:?}", bidder_did);
+    println!("The bid is valid: {:?}", is_valid_bid);
 }

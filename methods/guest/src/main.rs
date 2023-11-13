@@ -110,12 +110,6 @@ struct PersonCredentialClaims{
 
 
 pub fn main() {
-    // Decode the verifying key, message, and signature from the inputs.
-    // bid_size: u32,
-    // person_credential_jwt: &str,
-    // house_loan_credential_jwt: &str,
-    // eid_issuer_public_key: &str,
-    // bank_public_key: &str,
 
     let (bid_size, person_credential_jwt, house_loan_credential_jwt, eid_issuer_public_key, bank_public_key): (u32, String, String, String, String) = env::read();
     let bytes_pk_bank: &[u8; 32] = &hex::decode(&bank_public_key).unwrap().try_into().unwrap();
@@ -138,10 +132,9 @@ pub fn main() {
     let house_loan_crededential = token_house_loan.claims().clone();
     let loan_amount = house_loan_crededential.custom.vc.credential_subject.loan_amount;
 
-    let bid_size_exceeds_loan_amount = bid_size > loan_amount;
-    assert_eq!(bid_size_exceeds_loan_amount, false);
-    println!("bid_size_exceeds_loan_amount: {:?}", bid_size_exceeds_loan_amount);
+    let is_valid_bid = bid_size <= loan_amount;
+    assert!(is_valid_bid);
 
     // Commit to the journal the verifying key and message that was signed.
-    env::commit(&(bid_size_exceeds_loan_amount, person_did));
+    env::commit(&(is_valid_bid, person_did, bid_size));
 }

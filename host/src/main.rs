@@ -86,10 +86,18 @@ fn main() {
     let house_loan_credential = root.house_loan_credential;
 
     let receipt = prove_valid_bid(bid_size, &person_credential.proof.jwt, &house_loan_credential.proof.jwt, &public_key_eid, &public_key_bank);
-    let (is_valid_bid, bidder_did): (u32, String) = receipt.journal.decode().unwrap();
+    let (is_valid_bid, bidder_did, bid_size): (u32, String, u32) = receipt.journal.decode().unwrap();
     receipt.verify(JWT_VERIFY_ID).unwrap();
 
-    println!("Receipt verified successfully!");
-    println!("DID of the bidder: {:?}", bidder_did);
-    println!("The bid is valid: {:?}", is_valid_bid);
+    // print two empty lines
+    println!("\n");
+    // small title
+    println!("Verification results:");
+    println!("\n");
+    println!("{:<30} {} 💰", "Bid size:", bid_size);
+    println!("{:<30} {}", "Verification status;", if is_valid_bid != 0 { "Verified ✅" } else { "Failed ❌" });
+    println!("{:<30} {}", "Bid status:", if is_valid_bid != 0 { "Valid ✅" } else { "Invalid ❌" });
+    println!("{:<30} {}", "Bidder DID:", bidder_did);
+    println!("\n");
+
 }

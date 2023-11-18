@@ -126,10 +126,10 @@ pub fn main() {
     let token_house_loan: Token<HouseLoanCredentialClaims> = Ed25519.validator(&verifying_key_bank).validate(&untrusted_token_house_loan_credential).unwrap();
 
     // check if bid_size is less than loan_amount
-    let person_crededential = token_person.claims().clone();
+    let person_crededential = token_person.claims();
     let person_did = &person_crededential.custom.sub;
 
-    let house_loan_crededential = token_house_loan.claims().clone();
+    let house_loan_crededential = token_house_loan.claims();
     let loan_amount = house_loan_crededential.custom.vc.credential_subject.loan_amount;
 
     let is_valid_bid = bid_size <= loan_amount;

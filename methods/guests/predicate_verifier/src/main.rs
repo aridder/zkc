@@ -98,11 +98,6 @@ pub fn main() {
     let predicate_condition = &predicate.condition;
     let predicate_field = &predicate.field;
 
-    println!("date_of_birth: {}", date_of_birth);
-    println!("predicate_date_of_birth: {}", predicate_date_of_birth);
-    println!("predicate_condition: {:?}", predicate_condition);
-    println!("predicate_field: {}", predicate_field);
-
     let is_valid = check_predicate(credential, &predicate);
 
     // Commit to the journal the verifying key and message that was signed.

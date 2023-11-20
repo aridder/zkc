@@ -137,6 +137,7 @@ fn verify_predicate_program(data: &String) {
     println!("Verification results:");
     println!("\n");
     println!("{:<30} {}", "Verification status:", if valid { "Verified ✅" } else { "Failed ❌" });
+    println!("\n");
 
 }
 

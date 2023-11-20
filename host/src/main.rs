@@ -3,8 +3,10 @@
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
 use serde::{Deserialize, Serialize};
 use std::fs;
+use std::str::FromStr;
 
-use methods::{JWT_VERIFY_ELF, JWT_VERIFY_ID};
+use methods::{BID_VERIFIER_ELF, BID_VERIFIER_ID, PREDICATE_VERIFIER_ELF, PREDICATE_VERIFIER_ID};
+use crate::Condition::{GT, LT};
 
 #[derive(Serialize, Deserialize, Debug)]
 struct PublicKeyHolder {
@@ -47,6 +49,40 @@ struct Root {
     house_loan_credential: Credential,
 }
 
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+enum Condition {
+    LT,
+    GT,
+    EQ,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+struct Predicate {
+    field: String,
+    condition: Condition,
+    value: u32
+}
+
+
+fn prove_predicate(
+    jwt: &str,
+    public_key_issuer: &str,
+    predicate: Predicate
+) -> Receipt {
+
+    let input = (jwt, public_key_issuer, predicate);
+    let env = ExecutorEnv::builder()
+        .write(&input)
+        .unwrap()
+        .build()
+        .unwrap();
+
+    let prover = default_prover();
+
+    // Produce a receipt by proving the specified ELF binary.
+    prover.prove_elf(env, PREDICATE_VERIFIER_ELF).unwrap()
+}
+
 fn prove_valid_bid(
     bid_size: u32,
     person_credential_jwt: &str,
@@ -54,6 +90,7 @@ fn prove_valid_bid(
     eid_issuer_public_key: &str,
     bank_public_key: &str,
 ) -> Receipt {
+
     let input = (bid_size, person_credential_jwt, house_loan_credential_jwt, eid_issuer_public_key, bank_public_key);
     let env = ExecutorEnv::builder()
         .write(&input)
@@ -65,7 +102,7 @@ fn prove_valid_bid(
     let prover = default_prover();
 
     // Produce a receipt by proving the specified ELF binary.
-    prover.prove_elf(env, JWT_VERIFY_ELF).unwrap()
+    prover.prove_elf(env, BID_VERIFIER_ELF).unwrap()
 }
 
 fn main() {
@@ -74,6 +111,36 @@ fn main() {
 
     // read json file from current directory
     let data = fs::read_to_string("./data.json").expect("Unable to read file");
+    // verify_bid_program(&data);
+    verify_predicate_program(&data);
+}
+
+fn verify_predicate_program(data: &String) {
+    let root: Root = serde_json::from_str(&data).expect("JSON was not well-formatted");
+
+    let person_credential = root.person_credential;
+
+    let predicate = Predicate{
+        field: String::from_str("date_of_birth").unwrap(),
+        condition: GT,
+        value: 19791001
+    };
+
+    let public_key_eid = root.eid_issuer.public_key;
+
+    let receipt = prove_predicate(&person_credential.proof.jwt, &public_key_eid, predicate);
+
+    let valid: bool = receipt.journal.decode().unwrap();
+    receipt.verify(PREDICATE_VERIFIER_ID).unwrap();
+
+    println!("\n");
+    println!("Verification results:");
+    println!("\n");
+    println!("{:<30} {}", "Verification status:", if valid { "Verified ✅" } else { "Failed ❌" });
+
+}
+
+fn verify_bid_program(data: &String) {
 
     let root: Root = serde_json::from_str(&data).expect("JSON was not well-formatted");
 
@@ -85,9 +152,15 @@ fn main() {
     let person_credential = root.person_credential;
     let house_loan_credential = root.house_loan_credential;
 
-    let receipt = prove_valid_bid(bid_size, &person_credential.proof.jwt, &house_loan_credential.proof.jwt, &public_key_eid, &public_key_bank);
+    let receipt = prove_valid_bid(
+        bid_size,
+        &person_credential.proof.jwt,
+        &house_loan_credential.proof.jwt,
+        &public_key_eid,
+        &public_key_bank
+    );
     let (is_valid_bid, bidder_did, bid_size): (u32, String, u32) = receipt.journal.decode().unwrap();
-    receipt.verify(JWT_VERIFY_ID).unwrap();
+    receipt.verify(BID_VERIFIER_ID).unwrap();
 
     // print two empty lines
     println!("\n");
@@ -99,5 +172,4 @@ fn main() {
     println!("{:<30} {}", "Bid status:", if is_valid_bid != 0 { "Valid ✅" } else { "Invalid ❌" });
     println!("{:<30} {}", "Bidder DID:", bidder_did);
     println!("\n");
-
 }

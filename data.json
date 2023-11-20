@@ -1,23 +1,23 @@
 {
   "bidSize": 90000,
   "eidIssuer": {
-    "public_key": "08a7afd90669185118473b0c32b131e4ec117640baee540b9c743a782bb6b61e"
+    "public_key": "777b2f5c9a1a0e52947c406a30ebadc951cca14f3e6a0f25b5306c36c1159c91"
   },
   "bank": {
-    "public_key": "fd7042c505b5a4f047909da8d4c6c344b25a29f233f2201639445568617a6445"
+    "public_key": "80b7a5472f8b79c011eecaf8115ea93b81494e7cfbc670e397ee705cac20ec2e"
   },
   "person": {
-    "public_key": "5a2de976cf11503f2e6b670e2e12e0fe9f3b014eb615416b8ed0ac401811fbfd"
+    "public_key": "721ebd125312884b5ce4a047263e04d48631624fc32058318c577ab269be9d9c"
   },
   "personCredential": {
     "credentialSubject": {
       "name": "Bob Bobley",
-      "date_of_birth": "1980-10-01",
+      "date_of_birth": 19801001,
       "nationality": "NO",
-      "id": "did:key:z6MkkXHLrJ3bpDinQ736dvfBqt1AQhdqECbEkfmm7UHMyTCQ"
+      "id": "did:key:z6Mkn8ji3BqfuiDdcSQ9PXgnZEB1DWoEY19YX3hHNkYxcc1h"
     },
     "issuer": {
-      "id": "did:key:z6Mkf33cM15mFcLdi7fBwV8yKDu8o7LQSTHbaPzJaDWSWogR"
+      "id": "did:key:z6MknVfWMf9etYYB2XQ5iq4vNwVPBvhewsG4Mu4KG5q1Hhc4"
     },
     "type": [
       "VerifiableCredential",
@@ -26,10 +26,10 @@
     "@context": [
       "https://www.w3.org/2018/credentials/v1"
     ],
-    "issuanceDate": "2023-11-11T20:37:55.000Z",
+    "issuanceDate": "2023-11-20T19:49:29.000Z",
     "proof": {
       "type": "JwtProof2020",
-      "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUGVyc29uQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJuYW1lIjoiQm9iIEJvYmxleSIsImRhdGVfb2ZfYmlydGgiOiIxOTgwLTEwLTAxIiwibmF0aW9uYWxpdHkiOiJOTyJ9fSwic3ViIjoiZGlkOmtleTp6Nk1ra1hITHJKM2JwRGluUTczNmR2ZkJxdDFBUWhkcUVDYkVrZm1tN1VITXlUQ1EiLCJuYmYiOjE2OTk3MzUwNzUsImlzcyI6ImRpZDprZXk6ejZNa2YzM2NNMTVtRmNMZGk3ZkJ3Vjh5S0R1OG83TFFTVEhiYVB6SmFEV1NXb2dSIn0.ruDArqFrsNLm119AxflJgmOaztogxyF7hMFnFJ8NfoY2aq2fQeMY5gDgKrC4-9_XT8DKYPUm8TXI90QVF9XEBw"
+      "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUGVyc29uQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJuYW1lIjoiQm9iIEJvYmxleSIsImRhdGVfb2ZfYmlydGgiOjE5ODAxMDAxLCJuYXRpb25hbGl0eSI6Ik5PIn19LCJzdWIiOiJkaWQ6a2V5Ono2TWtuOGppM0JxZnVpRGRjU1E5UFhnblpFQjFEV29FWTE5WVgzaEhOa1l4Y2MxaCIsIm5iZiI6MTcwMDUwOTc2OSwiaXNzIjoiZGlkOmtleTp6Nk1rblZmV01mOWV0WVlCMlhRNWlxNHZOd1ZQQnZoZXdzRzRNdTRLRzVxMUhoYzQifQ.7c6sPZHwc-UZO2OlDv7_ttNLfnx9cBlvMYyAVXLryx_TTaleohTdaEqYmdpoM1tz3l2IVodWnnLOeDLRMVp6Aw"
     }
   },
   "houseLoanCredential": {
@@ -37,10 +37,10 @@
       "loan_amount": 1000000,
       "loan_purpose": "house purchase",
       "expiration_date": "2023-11-18",
-      "id": "did:key:z6MkkXHLrJ3bpDinQ736dvfBqt1AQhdqECbEkfmm7UHMyTCQ"
+      "id": "did:key:z6Mkn8ji3BqfuiDdcSQ9PXgnZEB1DWoEY19YX3hHNkYxcc1h"
     },
     "issuer": {
-      "id": "did:key:z6MkwWaUd3uHZchEqcFzFKD2Qy5CTrJdTx6pnXEAdc2B2nDJ"
+      "id": "did:key:z6Mko7ieXpH2JDCfBc9MijYSLz8LofTtuFoEs9i2rQfrsvNR"
     },
     "type": [
       "VerifiableCredential",
@@ -49,10 +49,10 @@
     "@context": [
       "https://www.w3.org/2018/credentials/v1"
     ],
-    "issuanceDate": "2023-11-11T20:37:55.000Z",
+    "issuanceDate": "2023-11-20T19:49:29.000Z",
     "proof": {
       "type": "JwtProof2020",
-      "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiSG91c2VMb2FuQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJsb2FuX2Ftb3VudCI6MTAwMDAwMCwibG9hbl9wdXJwb3NlIjoiaG91c2UgcHVyY2hhc2UiLCJleHBpcmF0aW9uX2RhdGUiOiIyMDIzLTExLTE4In19LCJzdWIiOiJkaWQ6a2V5Ono2TWtrWEhMckozYnBEaW5RNzM2ZHZmQnF0MUFRaGRxRUNiRWtmbW03VUhNeVRDUSIsIm5iZiI6MTY5OTczNTA3NSwiaXNzIjoiZGlkOmtleTp6Nk1rd1dhVWQzdUhaY2hFcWNGekZLRDJReTVDVHJKZFR4NnBuWEVBZGMyQjJuREoifQ.bftL5w-4JRKxvIg-5mFE9G305sHPzaSWng-VggTFmKPgXtJytj8XNFtGWh3bkCx1gAj2kdy5y7lMERwdgCv7Cw"
+      "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiSG91c2VMb2FuQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJsb2FuX2Ftb3VudCI6MTAwMDAwMCwibG9hbl9wdXJwb3NlIjoiaG91c2UgcHVyY2hhc2UiLCJleHBpcmF0aW9uX2RhdGUiOiIyMDIzLTExLTE4In19LCJzdWIiOiJkaWQ6a2V5Ono2TWtuOGppM0JxZnVpRGRjU1E5UFhnblpFQjFEV29FWTE5WVgzaEhOa1l4Y2MxaCIsIm5iZiI6MTcwMDUwOTc2OSwiaXNzIjoiZGlkOmtleTp6Nk1rbzdpZVhwSDJKRENmQmM5TWlqWVNMejhMb2ZUdHVGb0VzOWkyclFmcnN2TlIifQ.e3esT3D0TsvH_DDpbPVTrSKVLYzKvsoUfVYP6q5yULwjgqfGHOBc32ivD4zBChPPbHAJ1AwkguWe0ZsW14XBAg"
     }
   }
 }

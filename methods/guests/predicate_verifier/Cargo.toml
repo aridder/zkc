@@ -1,5 +1,5 @@
 [package]
-name = "jwt_verify"
+name = "predicate_verifier"
 version = "0.1.0"
 edition = "2021"
 

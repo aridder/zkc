@@ -1,15 +1,12 @@
-# Enhanced Privacy in Real Estate Transactions with RISC Zero zkVM and Verifiable Credentials
+# ZK Credential
 
-This is a project for the [ZK Hack Istanbul](https://www.zkistanbul.com/) hackathon.
+This is my submission for [ZK Hack Istanbul](https://www.zkistanbul.com/) hackathon. The project is a proof of concept.
 
-Thank you to the [RISC Zero](https://dev.risczero.com/) team for their support and guidance throughout the hackathon. 
-
-Also, thank you to the [ZK Hack](https://zkhack.dev/) team for organizing this event. It was a great experience!
+ZK Credential is a project that explores the use of Verifiable Credentials in maintaining privacy leveraging Zero-Knowledge Proofs (ZKP) in real-world scenarios.
 
 ## Quick Start
 
-The host program reads the `data.json` file and passes the data to the guest.
-This is where bid_size is set. You can change this to see if the program fails is set above the loan amount.
+The host program reads mock data from `data.json` file and passes the data to the guests.
 
 First, make sure [rustup](https://rustup.rs/) is installed. The
 [`rust-toolchain.toml`][rust-toolchain] file will be used by `cargo` to
@@ -33,23 +30,23 @@ cargo run
 
 ## Overview
 
-
-This project harnesses the power of RISC Zero's zkVM to demonstrate an enhanced privacy application in real estate
-transactions.
-It specifically explores the utilization of Verifiable Credentials from eIDAS 2.0 for EU citizens, showcasing how these
-credentials
-can be used in a more private manner through Zero-Knowledge Proofs (ZKP) in real-world scenarios.
-
-## Objectives
-
-- To demonstrate the effective use of RISC Zero's zkVM in privacy-centric applications.
-- To explore the application of Verifiable Credentials in maintaining privacy in financial transactions.
-- To investigate the potential of eIDAS 2.0 Verifiable Credentials in enhancing privacy for EU citizens, particularly in
-  hiding sensitive information like maximum bid amounts in real estate bidding and social security numbers in other use
-  cases.
+ZK Credential explores the utilization of Verifiable Credentials from eIDAS 2.0 for EU citizens, showcasing how these
+credentials can be used to hide sensitive information like maximum bid amounts in real estate bidding and social
+security numbers in other use cases.
 
 ## Implementation
 
+I have created two programs(guests):
+
+1. Make a bid to a broker. Check if the bid is less than the maximum amount allowed by the bank. 
+2. Generalize the program to accept any Verifiable Credential - This is a proof of concept to show how the program can
+   be generalized to accept any Verifiable Credential and validate against a given Predicate:
+    - GT - Greater than
+    - LT - Less than
+    - EQ - Equal to
+    - More to come...
+
+### 1. Make a bid to a broker
 
 ![Flow](./assets/flow.png)
 
@@ -61,9 +58,9 @@ The application employs two key Verifiable Credentials:
    granted privilege.
    These credentials are signed by respective issuers and authenticated by the user.
 
-## Core Process:
+#### Core Process:
 
-1. Credential Submission: Users submit signed JWTs for PersonCredential and HouseLoanCredential.
+1. Credential Submission: Bid size, PersonCredential and HouseLoanCredential.
 2. The RISC Zero zkVM runs the guest code, which performs the following checks:
     - Validation of JWT signatures and data.
     - Comparison of the bid size with the loan amount. If the bid exceeds the loan amount, the process fails.
@@ -71,18 +68,25 @@ The application employs two key Verifiable Credentials:
     - A Receipt with a cryptographic seal.
     - A Journal containing the public output, accessible via receipt.journal.
 
+### 2. Generalize the program to accept any Verifiable Credential
+
+#### Core Process:
+
+1. Use of any Verifiable Credential: E.g. PersonCredential and a Predicate like GT, LT, EQ. and the name of the field
+   to compare.
+
+```
+   let predicate = Predicate{
+        field: String::from_str("date_of_birth").unwrap(),
+        condition: GT,
+        value: 19791001
+    };
+```
+
 ## Technology Stack
 
 [RISC Zero zkVM](https://dev.risczero.com/)
-[Verifiable Credentials](https://www.w3.org/TR/vc-data-model/) - All citizens will have a digital wallet that contains
-their credentials from 2026/2027.
-
-## Key Features
-
-* Enhanced Privacy: Employs ZKP to verify transactions without exposing sensitive personal and financial details.
-* Secure Transaction Validation: Ensures financial integrity by validating bid amounts against pre-approved loans.
-* Versatile Application: Demonstrates the potential of Verifiable Credentials with ZK beyond real estate, such as
-  providing proof of age without revealing full social security numbers.
+[Verifiable Credentials](https://www.w3.org/TR/vc-data-model/) 
 
 ## Running proofs remotely on Bonsai
 
@@ -114,10 +118,15 @@ zkc
 └── methods
     ├── Cargo.toml
     ├── build.rs
-    ├── guest
-    │   ├── Cargo.toml
-    │   └── src
-    │       └── main.rs                   <-- [Guest code for house bid, jwt validation, etc.]
+    ├── guests
+    │   ├── bid_verifier
+    │       ├── Cargo.toml
+    │       └── src
+    │           └── main.rs                   <-- [Guest code for house bid, jwt validation, etc.]
+    │   └── predicate_verifier
+    │       ├── Cargo.toml
+    │       └── src
+    │           └── main.rs                   <-- [Guest code for predicate validation, jwt validation, etc.]
     └── src
         └── lib.rs
 ```

@@ -8,9 +8,11 @@ ZK Credential is a project that explores the use of Verifiable Credentials in ma
 
 The host program reads mock data from `data.json` file and passes the data to the guests.
 
-First, make sure [rustup](https://rustup.rs/) is installed. The
+1. First, make sure [rustup](https://rustup.rs/) is installed. The
 [`rust-toolchain.toml`][rust-toolchain] file will be used by `cargo` to
 automatically install the correct version.
+
+2. Install [Risc Zero Toolchain](https://dev.risczero.com/api/zkvm/quickstart#1-install-the-risc-zero-toolchain)
 
 To build all methods and execute the method within the zkVM, run the following
 command:

@@ -3,10 +3,9 @@
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
 use serde::{Deserialize, Serialize};
 use std::fs;
-use std::str::FromStr;
 
 use methods::{BID_VERIFIER_ELF, BID_VERIFIER_ID, PREDICATE_VERIFIER_ELF, PREDICATE_VERIFIER_ID};
-use crate::Condition::{GT, LT};
+use crate::Condition::{EQ, GT, LT, NEQ};
 
 #[derive(Serialize, Deserialize, Debug)]
 struct PublicKeyHolder {
@@ -54,23 +53,24 @@ enum Condition {
     LT,
     GT,
     EQ,
+    NEQ,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 struct Predicate {
     field: String,
     condition: Condition,
-    value: u32
+    value: u32,
+    return_value: String,
 }
-
 
 fn prove_predicate(
     jwt: &str,
     public_key_issuer: &str,
-    predicate: Predicate
+    predicate_list: Vec<Predicate>,
 ) -> Receipt {
 
-    let input = (jwt, public_key_issuer, predicate);
+    let input = (jwt, public_key_issuer, predicate_list);
     let env = ExecutorEnv::builder()
         .write(&input)
         .unwrap()
@@ -121,24 +121,31 @@ fn verify_predicate_program(data: &String) {
     let person_credential = root.person_credential;
 
     let predicate = Predicate{
-        field: String::from_str("date_of_birth").unwrap(),
+        field: String::from("date_of_birth"),
         condition: GT,
-        value: 19791001
+        value: 19791001,
+        return_value: String::from("Subject is older than 40 years old")
     };
+
+    let predicate2 = Predicate{
+        field: String::from("date_of_birth"),
+        condition: GT,
+        value: 19781001,
+        return_value: String::from("Subject is older than 40 years old")
+    };
+
+    let predicate_list = vec![predicate, predicate2];
 
     let public_key_eid = root.eid_issuer.public_key;
 
-    let receipt = prove_predicate(&person_credential.proof.jwt, &public_key_eid, predicate);
+    let receipt = prove_predicate(&person_credential.proof.jwt, &public_key_eid, predicate_list);
 
-    let valid: bool = receipt.journal.decode().unwrap();
+    let (issuer, subect, result_list): (String, String, Vec<String>) = receipt.journal.decode().unwrap();
     receipt.verify(PREDICATE_VERIFIER_ID).unwrap();
 
-    println!("\n");
-    println!("Verification results:");
-    println!("\n");
-    println!("{:<30} {}", "Verification status:", if valid { "Verified ✅" } else { "Failed ❌" });
-    println!("\n");
-
+    println!("Issuer: {}", issuer);
+    println!("Subject: {}", subect);
+    println!("Result list: {:?}", result_list);
 }
 
 fn verify_bid_program(data: &String) {

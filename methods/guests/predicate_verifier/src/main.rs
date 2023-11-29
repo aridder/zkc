@@ -58,6 +58,7 @@ enum Condition {
     LT,
     GT,
     EQ,
+    NEQ,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -65,23 +66,25 @@ struct Predicate {
     field: String,
     condition: Condition,
     value: u32,
+    return_value: String,
 }
 
 fn check_predicate(claims: &CredentialClaims, predicate: &Predicate) -> bool {
     let credential_subject = &claims.vc.credential_subject;
     let field = &predicate.field;
-    let value = &predicate.value;
+    let value = predicate.value;
     let condition = &predicate.condition;
     let credential_subject = credential_subject[field].as_u64().unwrap() as u32;
     match condition {
-        Condition::LT => credential_subject < *value,
-        Condition::GT => credential_subject > *value,
-        Condition::EQ => credential_subject == *value,
+        Condition::LT => credential_subject < value,
+        Condition::GT => credential_subject > value,
+        Condition::EQ => credential_subject == value,
+        Condition::NEQ => credential_subject != value,
     }
 }
 
 pub fn main() {
-    let (jwt_credential, public_key_issuer, predicate): (String, String, Predicate) = env::read();
+    let (jwt_credential, public_key_issuer, predicate_list): (String, String, Vec<Predicate>) = env::read();
 
     let bytes_pk_eid_issuer: &[u8; 32] = &hex::decode(&public_key_issuer).unwrap().try_into().unwrap();
 
@@ -91,15 +94,17 @@ pub fn main() {
     let untrusted_token_credential = UntrustedToken::new(&jwt_credential).unwrap();
 
     let credential_claims: Token<CredentialClaims> = Ed25519.validator(&verifying_key_eid_issuer).validate(&untrusted_token_credential).unwrap();
-    let credential = &credential_claims.claims().custom;
 
-    let date_of_birth = credential.vc.credential_subject["date_of_birth"].as_u64().unwrap() as u32;
-    let predicate_date_of_birth = predicate.value;
-    let predicate_condition = &predicate.condition;
-    let predicate_field = &predicate.field;
+    let claims = &credential_claims.claims().custom;
 
-    let is_valid = check_predicate(credential, &predicate);
+    for predicate in &predicate_list {
+        let is_valid = &check_predicate(claims, &predicate);
+        assert!(is_valid);
+    }
 
-    // Commit to the journal the verifying key and message that was signed.
-    env::commit(&(is_valid));
+    env::commit(&(
+        &claims.iss,
+        &claims.sub,
+        &predicate_list.into_iter().map(|x| x.return_value).collect::<Vec<String>>()
+    ))
 }

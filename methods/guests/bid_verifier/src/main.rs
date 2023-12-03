@@ -2,11 +2,26 @@
 
 use ed25519_dalek::VerifyingKey;
 use jwt_compact::{alg::*, prelude::*, Token, UntrustedToken};
-// If you want to try std support, also update the guest Cargo.toml file
+// If you want to try std support, also update the guests Cargo.toml file
 use risc0_zkvm::guest::env;
 use serde::{Deserialize, Serialize};
 
 risc0_zkvm::guest::entry!(main);
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+struct GenericCredential {
+    #[serde(rename = "credentialSubject")]
+    credential_subject: serde_json::Value, // Flexible subject
+    issuer: Issuer,
+    #[serde(rename = "type")]
+    types: Vec<String>,
+    #[serde(rename = "@context")]
+    context: Vec<String>,
+    #[serde(rename = "issuanceDate")]
+    issuance_date: String,
+    proof: Proof,
+}
+
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 struct PersonCredentialSubject {

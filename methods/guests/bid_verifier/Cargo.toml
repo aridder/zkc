@@ -1,0 +1,18 @@
+[package]
+name = "bid_verifier"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+serde = "1.0"
+serde_json = "1.0"
+risc0-zkvm = { version = "0.19.1", default-features = false, features = ["std"] }
+hex = "0.4.3"
+k256 = { version = "=0.13.1", features = ["arithmetic", "serde", "expose-field", "std", "ecdsa"], default_features = false }
+jwt-compact = { version = "0.8.0", features = ["ed25519-dalek"] }
+ed25519-dalek = "2.0.0"
+
+[profile.release]
+lto = "thin"

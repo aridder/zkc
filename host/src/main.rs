@@ -111,8 +111,8 @@ fn main() {
 
     // read json file from current directory
     let data = fs::read_to_string("./data.json").expect("Unable to read file");
-    // verify_bid_program(&data);
-    verify_predicate_program(&data);
+    verify_bid_program(&data);
+    // verify_predicate_program(&data);
 }
 
 fn verify_predicate_program(data: &String) {

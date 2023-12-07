@@ -26,7 +26,7 @@ struct GenericCredential {
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 struct PersonCredentialSubject {
     name: String,
-    date_of_birth: String,
+    date_of_birth: u32,
     nationality: String,
 }
 

@@ -80,7 +80,7 @@ fn prove_predicate(
     let prover = default_prover();
 
     // Produce a receipt by proving the specified ELF binary.
-    prover.prove(env, PREDICATE_VERIFIER_ELF).unwrap()
+    prover.prove(env, PREDICATE_VERIFIER_ELF).unwrap().receipt
 }
 
 fn prove_valid_bid(
@@ -102,7 +102,7 @@ fn prove_valid_bid(
     let prover = default_prover();
 
     // Produce a receipt by proving the specified ELF binary.
-    prover.prove(env, BID_VERIFIER_ELF).unwrap()
+    prover.prove(env, BID_VERIFIER_ELF).unwrap().receipt
 }
 
 fn main() {

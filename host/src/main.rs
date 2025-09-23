@@ -2,10 +2,12 @@
 // The ELF is used for proving and the ID is used for verification.
 use risc0_zkvm::{default_prover, ExecutorEnv, Receipt};
 use serde::{Deserialize, Serialize};
+use clap::Parser;
 use std::fs;
 
 use methods::{BID_VERIFIER_ELF, BID_VERIFIER_ID, PREDICATE_VERIFIER_ELF, PREDICATE_VERIFIER_ID};
-use crate::Condition::{EQ, GT, LT, NEQ};
+use crate::Condition::GT;
+mod api;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct PublicKeyHolder {
@@ -43,12 +45,18 @@ struct Root {
     bank: PublicKeyHolder,
     person: PublicKeyHolder,
     #[serde(rename = "personCredential")]
-    person_credential: Credential,
+    credential: Credential,
     #[serde(rename = "houseLoanCredential")]
     house_loan_credential: Credential,
 }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ProofRequest {
+    pub credentials: Vec<Credential>,
+    pub public_keys: Vec<PublicKeyHolder>,
+    pub predicates: Vec<Predicate>,
+}
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 enum Condition {
     LT,
     GT,
@@ -56,7 +64,7 @@ enum Condition {
     NEQ,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 struct Predicate {
     field: String,
     condition: Condition,
@@ -105,20 +113,42 @@ fn prove_valid_bid(
     prover.prove(env, BID_VERIFIER_ELF).unwrap().receipt
 }
 
+// Simple CLI: always reads predicate_norwegian_1985.json
 fn main() {
-    // Initialize tracing. In order to view logs, run `RUST_LOG=info cargo run`
-    env_logger::init();
+    let data = fs::read_to_string("predicate_norwegian_1985.json").expect("Unable to read file");
+    let req: ProofRequest = serde_json::from_str(&data).expect("Invalid JSON structure");
 
-    // read json file from current directory
-    let data = fs::read_to_string("./data.json").expect("Unable to read file");
-    // verify_bid_program(&data);
-    verify_predicate_program(&data);
+    let credential = req.credentials.get(0).expect("No credential provided");
+    let public_key = &req.public_keys.get(0).expect("No public key provided").public_key;
+    let predicate_list = req.predicates.clone();
+
+    let receipt = prove_predicate(&credential.proof.jwt, public_key, predicate_list);
+
+    let (issuer, subject, result_list): (String, String, Vec<String>) = receipt.journal.decode().unwrap();
+    receipt.verify(PREDICATE_VERIFIER_ID).unwrap();
+
+    println!("Issuer: {}", issuer);
+    println!("Subject: {}", subject);
+    println!("Results: {:?}", result_list);
 }
+
+// --- HTTP server entrypoint ---
+// #[tokio::main]
+// async fn main() {
+//     let app = api::app();
+//     println!("Starting HTTP server on 0.0.0.0:3000");
+//     axum::serve(
+//         tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap(),
+//         app.into_make_service()
+//     )
+//     .await
+//     .unwrap();
+// }
 
 fn verify_predicate_program(data: &String) {
     let root: Root = serde_json::from_str(&data).expect("JSON was not well-formatted");
 
-    let person_credential = root.person_credential;
+    let person_credential = root.credential;
 
     let predicate = Predicate{
         field: String::from("date_of_birth"),
@@ -157,7 +187,7 @@ fn verify_bid_program(data: &String) {
     let public_key_eid = root.eid_issuer.public_key;
     let public_key_bank = root.bank.public_key;
 
-    let person_credential = root.person_credential;
+    let person_credential = root.credential;
     let house_loan_credential = root.house_loan_credential;
 
     let receipt = prove_valid_bid(

@@ -5,6 +5,43 @@ This is my submission for [ZK Hack Istanbul](https://www.zkistanbul.com/) hackat
 ZK Credential is a project that explores the use of Verifiable Credentials in maintaining privacy leveraging Zero-Knowledge Proofs (ZKP) in real-world scenarios.
 
 ## Quick Start
+## Usage
+
+### CLI Mode
+
+The CLI mode always processes the file `predicate_norwegian_1985.json` (see [`host/src/main.rs`](host/src/main.rs:1)).
+To use a different file, change the filename in the code.
+
+To run the CLI and verify a proof:
+
+```bash
+RISC0_DEV_MODE=true cargo run -p host
+```
+
+**Dev mode (`RISC0_DEV_MODE=true`) enables fast, insecure proving for development and testing.**
+
+### HTTP API Mode
+
+To run the HTTP API server, comment out the CLI `main()` function in [`host/src/main.rs`](host/src/main.rs:1) and uncomment the async main function for the API server.
+
+Then run:
+
+```bash
+RISC0_DEV_MODE=true cargo run -p host
+```
+
+The server will start on [http://localhost:3000](http://localhost:3000).
+
+To test the API, send a POST request to `/verify_predicate` with a JSON body matching the `ProofRequest` structure.
+For example, using the provided Norwegian example:
+
+```bash
+curl -X POST http://localhost:3000/verify_predicate \
+  -H "Content-Type: application/json" \
+  -d @predicate_norwegian_1985.json
+```
+
+**Dev mode (`RISC0_DEV_MODE=true`) is recommended for fast proving during development. Omit it for production/real proofs.**
 
 The host program reads mock data from `data.json` file and passes the data to the guests.
 
@@ -29,6 +66,51 @@ To run for production, and get a real receipt, run the following command:
 ```bash
 cargo run
 ```
+
+## Running the HTTP API (Development Mode)
+
+The HTTP API is implemented in [`host/src/api.rs`](host/src/api.rs:1) and exposes endpoints for proof generation. The server is started from [`host/src/main.rs`](host/src/main.rs:1).
+
+To run the API server in development mode (with fake receipts):
+
+```bash
+RISC0_DEV_MODE=true cargo run -p host
+```
+
+The server will start on [http://localhost:3000](http://localhost:3000).
+
+You can trigger proof generation by sending a POST request to `/verify_predicate` with a JSON body matching the `Root` struct (see `data.json` for an example):
+
+```bash
+curl -X POST http://localhost:3000/verify_predicate \
+## Example API Requests
+
+You can find example request files for the `/verify_predicate` endpoint:
+
+- [`predicate_norwegian_1985.json`](predicate_norwegian_1985.json): Norwegian credential (Alice Example), date of birth 1985.
+- [`predicate_swedish_2002.json`](predicate_swedish_2002.json): Swedish credential (Bob Bobley), date of birth 2002.
+- [`predicate_danish_1999.json`](predicate_danish_1999.json): Danish credential (Charlie Example), date of birth 1999.
+
+To test the API with these files, use:
+
+```bash
+curl -X POST http://localhost:3000/verify_predicate \
+  -H "Content-Type: application/json" \
+  -d @predicate_norwegian_1985.json
+```
+
+You can create additional `.json` files with different predicates and credentials to test various scenarios. Just ensure the structure matches the expected input for the endpoint.
+  -H "Content-Type: application/json" \
+  -d @data.json
+```
+
+**Production mode:**  
+Omit `RISC0_DEV_MODE=true` to generate real receipts.
+
+### File structure and responsibilities
+
+- [`host/src/api.rs`](host/src/api.rs:1): Contains the HTTP API logic (routes and handlers).
+- [`host/src/main.rs`](host/src/main.rs:1): The entrypoint that starts the HTTP server and wires up the API.
 
 ## Overview
 

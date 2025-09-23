@@ -1,0 +1,46 @@
+{
+  "credentials": [
+    {
+      "credentialSubject": {
+        "name": "Alice Example",
+        "date_of_birth": 19850101,
+        "nationality": "NO",
+        "id": "did:key:z6Mkn8ji3BqfuiDdcSQ9PXgnZEB1DWoEY19YX3hHNkYxcc1h"
+      },
+      "issuer": {
+        "id": "did:key:z6MknVfWMf9etYYB2XQ5iq4vNwVPBvhewsG4Mu4KG5q1Hhc4"
+      },
+      "type": [
+        "VerifiableCredential",
+        "PersonCredential"
+      ],
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1"
+      ],
+      "issuanceDate": "2023-11-20T19:49:29.000Z",
+      "proof": {
+        "type": "JwtProof2020",
+        "jwt": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUGVyc29uQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJuYW1lIjoiQm9iIEJvYmxleSIsImRhdGVfb2ZfYmlydGgiOjE5ODAxMDAxLCJuYXRpb25hbGl0eSI6Ik5PIn19LCJzdWIiOiJkaWQ6a2V5Ono2TWtuOGppM0JxZnVpRGRjU1E5UFhnblpFQjFEV29FWTE5WVgzaEhOa1l4Y2MxaCIsIm5iZiI6MTcwMDUwOTc2OSwiaXNzIjoiZGlkOmtleTp6Nk1rblZmV01mOWV0WVlCMlhRNWlxNHZOd1ZQQnZoZXdzRzRNdTRLRzVxMUhoYzQifQ.7c6sPZHwc-UZO2OlDv7_ttNLfnx9cBlvMYyAVXLryx_TTaleohTdaEqYmdpoM1tz3l2IVodWnnLOeDLRMVp6Aw"
+      }
+    }
+  ],
+  "public_keys": [
+    {
+      "public_key": "777b2f5c9a1a0e52947c406a30ebadc951cca14f3e6a0f25b5306c36c1159c91"
+    }
+  ],
+  "predicates": [
+    {
+      "field": "date_of_birth",
+      "condition": "GT",
+      "value": 19791001,
+      "return_value": "Subject is older than 40 years old"
+    },
+    {
+      "field": "date_of_birth",
+      "condition": "GT",
+      "value": 19781001,
+      "return_value": "Subject is older than 40 years old"
+    }
+  ]
+}

@@ -1,8 +1,38 @@
-# ZK Credential
+# 🪶 ZK Credential
 
-This is my submission for [ZK Hack Istanbul](https://www.zkistanbul.com/) hackathon. The project is a proof of concept.
+ZK Credential is a proof-of-concept that demonstrates how Zero-Knowledge Proofs (ZKPs) and Verifiable Credentials (VCs) can bring privacy-preserving trust to real-world digital identity scenarios.
 
-ZK Credential is a project that explores the use of Verifiable Credentials in maintaining privacy leveraging Zero-Knowledge Proofs (ZKP) in real-world scenarios.
+Instead of revealing personal data to prove something about yourself, ZK Credential allows you to prove only what’s necessary — without disclosing the underlying information.
+
+
+## 🔍 What It Solves
+
+Today, proving eligibility, identity, or compliance almost always means sharing private data — like your birth date, social security number, or financial details.
+ZK Credential replaces that model with verifiable logic:
+
+“I can prove that this statement about me is true — without showing you the data behind it.”
+
+
+## 🌍 Real-World Example
+
+Built on RISC Zero zkVM, this project shows how EU citizens’ eIDAS 2.0 Verifiable Credentials can be used privately across borders.
+It enables users to prove facts like being over 18 years old and a citizen of an EU member state, without revealing sensitive data such as their date of birth, social security number, or national ID.
+
+Other scenarios include:
+	•	Proving a loan bid is below a bank-approved limit without exposing financial data.
+	•	Showing eligibility for access or benefits without sharing personal identifiers.
+	•	Demonstrating age or nationality verification for online services while keeping private fields hidden.
+
+## 🧩 Why It Matters
+
+This approach aligns with the principles of eIDAS 2.0 and the EU Digital Identity Wallet, where individuals own their identity data and selectively disclose only what’s required.
+ZK Credential offers a concrete example of how Zero-Knowledge Proofs can make these privacy goals practically achievable — starting with low-risk, high-value use cases.
+
+## ⚙️ Technology Stack
+	•	RISC Zero zkVM for generating and verifying ZK proofs
+	•	Verifiable Credentials (W3C VC Data Model) for interoperable, signed identity data
+	•	Compatible with eIDAS 2.0 and EUDI Wallet standards
+
 
 ## Quick Start
 ## Usage
